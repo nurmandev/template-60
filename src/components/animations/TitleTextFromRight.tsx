@@ -17,14 +17,14 @@ export const TitleTextFromRight = ({ text, startAt = 0 }: { text: string; startA
           }}
         >
           {line.split('').map((char, charIndex) => {
-            const delay = 4;
+            const delay = 3;
             const startFrame = startAt + charIndex * delay;
-            const opacity = interpolate(frame, [startFrame, startFrame + delay + 5], [0, 1], {
+            const opacity = interpolate(frame, [startFrame, startFrame + delay + 20], [0, 1], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
               easing: Easing.out(Easing.ease),
             });
-            const top = interpolate(frame, [startFrame, startFrame + delay + 10], [50, 0], {
+            const top = interpolate(frame, [startFrame, startFrame + delay + 20], [100, 0], {
               extrapolateLeft: 'clamp',
               extrapolateRight: 'clamp',
               easing: Easing.out(Easing.ease),

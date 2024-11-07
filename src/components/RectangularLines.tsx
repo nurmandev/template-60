@@ -56,7 +56,7 @@ const RectangularLines = ({
         position: 'absolute',
         top: y,
         left: x,
-        transform: 'translate(-50%, -50%)', // Center at (x, y)
+        transform: 'translate(-50%, -50%)',
         width: width || '100%',
         height: height || '100%',
         opacity,

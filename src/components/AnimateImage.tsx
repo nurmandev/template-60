@@ -8,6 +8,8 @@ interface AnimatedImageProps {
   startAt?: number; // Delay before the animation starts
   x?: number;
   y?: number;
+  overlayColor?: string; // Optional overlay color (e.g., 'rgba(0,0,0,0.5)')
+  grayscaleLevel?: number; // Grayscale level from 0 (no grayscale) to 1 (full grayscale)
 }
 
 const getSlideInPosition = (direction: string, width: number, height: number) => {
@@ -34,6 +36,8 @@ const AnimatedImage = ({
   startAt = 0,
   x = 0,
   y = 0,
+  overlayColor = 'rgba(0, 0, 0, 0.3)', // Default overlay color
+  grayscaleLevel = 0, // Default to no grayscale
 }: AnimatedImageProps) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -76,16 +80,32 @@ const AnimatedImage = ({
           [axis]: position,
           opacity,
           overflow: 'hidden',
+          filter: `grayscale(${grayscaleLevel})`, // Apply grayscale filter
         }}
       >
         <Img
           src={image}
           style={{
-            width,
-            height,
+            width: '100%',
+            height: '100%',
             objectFit: 'cover',
           }}
         />
+        {/* Overlay for color tint */}
+        {overlayColor && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: overlayColor,
+              opacity: 0.8,
+              pointerEvents: 'none', // Ensures overlay is non-interactive
+            }}
+          />
+        )}
       </div>
     </AbsoluteFill>
   );

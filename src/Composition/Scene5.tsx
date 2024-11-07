@@ -1,4 +1,4 @@
-import { AbsoluteFill, staticFile } from 'remotion';
+import { AbsoluteFill, Audio, staticFile, useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { useTextSplitter } from '../lib/useTextSplitter';
 import { colorVar } from '../lib/helpers';
@@ -9,6 +9,7 @@ import { BackgroundProps } from '../backgrounds';
 import RectangularLines from '../components/RectangularLines';
 import DotsAnimation from '../components/animations/DotsAnimation';
 import Logo from '../components/Logo';
+import AnimatedBackground from '../components/animateBackground';
 
 export const scene5Schema = z.object({
   logo: z.string(),
@@ -19,6 +20,8 @@ export const scene5Schema = z.object({
 type Scene5Props = z.infer<typeof scene5Schema> & { background: BackgroundProps };
 
 const Scene5: React.FC<Scene5Props> = (props) => {
+  const { defaultProps } = useVideoConfig();
+
   // we make the text conform to available width, fontFamily, fontWeight, and fontSize and add \n to the text
   const titleSplit = useTextSplitter({
     text: props.title.toUpperCase(),
@@ -59,6 +62,11 @@ const Scene5: React.FC<Scene5Props> = (props) => {
       {/* The background component is always the same setup like this.
       Get's it's input from the root */}
       <Background {...props.background} />
+      <Audio src={staticFile('VO_5.mp3')} volume={defaultProps.audioVolume as number} />
+
+      <AbsoluteFill>
+        <AnimatedBackground />
+      </AbsoluteFill>
       <div
         style={{
           textAlign: 'center',
@@ -70,14 +78,14 @@ const Scene5: React.FC<Scene5Props> = (props) => {
           alignItems: 'center',
         }}
       >
-        <Logo logo={staticFile('Logo.png')} direction="bottom-top" height={250} />
+        <Logo logo={staticFile('Logo.png')} direction="bottom-top" height={250} delay={15} />
         <div
           style={{
             ...subtitle1Split.style,
             color: '#fae092',
           }}
         >
-          <TitleTextFromRight text={subtitle1Split.text} />
+          <TitleTextFromRight text={subtitle1Split.text} startAt={20} />
         </div>
         <div
           style={{
@@ -85,7 +93,7 @@ const Scene5: React.FC<Scene5Props> = (props) => {
             color: colorVar('primaryText'),
           }}
         >
-          <TitleTextFromRight text={titleSplit.text} />
+          <TitleTextFromRight text={titleSplit.text} startAt={30} />
         </div>
         <div
           style={{
@@ -93,7 +101,7 @@ const Scene5: React.FC<Scene5Props> = (props) => {
             color: '#fae092',
           }}
         >
-          <TitleTextFromRight text={subtitle2Split.text} />
+          <TitleTextFromRight text={subtitle2Split.text} startAt={38} />
         </div>
       </div>
       <AbsoluteFill>
@@ -109,6 +117,7 @@ const Scene5: React.FC<Scene5Props> = (props) => {
         height={HEIGHT * 0.2}
         x={WIDTH * 0.15}
         y={HEIGHT * 0.92}
+        delay={10}
       />
       <RectangularLines
         direction="topToBottom"
@@ -117,6 +126,7 @@ const Scene5: React.FC<Scene5Props> = (props) => {
         height={HEIGHT * 0.42}
         x={WIDTH * 0.85}
         y={HEIGHT * 0.1}
+        delay={10}
       />
     </AbsoluteFill>
   );

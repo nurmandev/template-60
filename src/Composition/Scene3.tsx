@@ -1,4 +1,4 @@
-import { AbsoluteFill } from 'remotion';
+import { AbsoluteFill, Audio, staticFile, useVideoConfig } from 'remotion';
 
 import { z } from 'zod';
 import Logo from '../components/Logo';
@@ -10,6 +10,7 @@ import { HEIGHT, WIDTH } from '../lib/consts';
 import RectangularLines from '../components/RectangularLines';
 import Gradient from '../components/Gradient';
 import DotsAnimation from '../components/animations/DotsAnimation';
+import AnimatedBackground from '../components/animateBackground';
 
 export const scene3Schema = z.object({
   logo: z.string(),
@@ -20,6 +21,8 @@ export const scene3Schema = z.object({
 type Scene3Props = z.infer<typeof scene3Schema> & { background: BackgroundProps };
 
 const Scene3: React.FC<Scene3Props> = (props) => {
+  const { defaultProps } = useVideoConfig();
+
   const titleSplit = useTextSplitter({
     text: props.title.toUpperCase(),
     fontSize: 110,
@@ -31,6 +34,8 @@ const Scene3: React.FC<Scene3Props> = (props) => {
   return (
     <AbsoluteFill style={{ background: '#93611b' }}>
       {/* <Background {...props.background} /> */}
+
+      <Audio src={staticFile('VO_3.mp3')} volume={defaultProps.audioVolume as number} />
       <Gradient
         direction="bottomToTop"
         height={HEIGHT * 0.3}
@@ -38,6 +43,7 @@ const Scene3: React.FC<Scene3Props> = (props) => {
         x={WIDTH * 0.9}
         y={WIDTH * 0.03}
         opacity={0.5}
+        delay={15}
       />
       <AnimatedImage
         image={props.img1}
@@ -45,6 +51,9 @@ const Scene3: React.FC<Scene3Props> = (props) => {
         height={HEIGHT * 0.9}
         direction="top-bottom"
         x={WIDTH * 0.3}
+        startAt={13}
+        grayscaleLevel={0.5}
+        overlayColor="rgb(0, 47, 49)"
       />
       <AnimatedImage
         image={props.img2}
@@ -52,6 +61,8 @@ const Scene3: React.FC<Scene3Props> = (props) => {
         height={HEIGHT * 0.5}
         direction="bottom-top"
         x={WIDTH * 0.07}
+        grayscaleLevel={1}
+        startAt={50}
       />
       <Gradient
         direction="topToBottom"
@@ -61,7 +72,11 @@ const Scene3: React.FC<Scene3Props> = (props) => {
         y={HEIGHT * 0.8}
         color="black"
         opacity={1}
+        delay={70}
       />
+      <AbsoluteFill>
+        <AnimatedBackground />
+      </AbsoluteFill>
       <AbsoluteFill style={{ left: WIDTH * 0.8, top: 100 }}>
         <Logo logo={props.logo} direction="bottom-top" height={200} />
       </AbsoluteFill>
@@ -73,7 +88,7 @@ const Scene3: React.FC<Scene3Props> = (props) => {
           top: HEIGHT * 0.07,
         }}
       >
-        <TitleTextFromRight text={titleSplit.text} />
+        <TitleTextFromRight text={titleSplit.text} startAt={62} />
       </AbsoluteFill>
 
       <RectangularLines
@@ -83,9 +98,10 @@ const Scene3: React.FC<Scene3Props> = (props) => {
         x={WIDTH * 0.8}
         y={HEIGHT - HEIGHT * 0.225}
         color="gray"
+        delay={20}
       />
       <AbsoluteFill>
-        <DotsAnimation x={WIDTH * 0.07} y={HEIGHT * 0.4} />
+        <DotsAnimation x={WIDTH * 0.07} y={HEIGHT * 0.4} color="black" />
       </AbsoluteFill>
 
       <AbsoluteFill>

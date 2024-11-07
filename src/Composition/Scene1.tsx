@@ -1,4 +1,4 @@
-import { AbsoluteFill, staticFile } from 'remotion';
+import { AbsoluteFill, Audio, staticFile, useVideoConfig } from 'remotion';
 import { z } from 'zod';
 import { useTextSplitter } from '../lib/useTextSplitter';
 import { colorVar } from '../lib/helpers';
@@ -9,6 +9,7 @@ import { BackgroundProps } from '../backgrounds';
 import RectangularLines from '../components/RectangularLines';
 import DotsAnimation from '../components/animations/DotsAnimation';
 import Logo from '../components/Logo';
+import AnimatedBackground from '../components/animateBackground';
 
 export const scene1Schema = z.object({
   logo: z.string(),
@@ -18,6 +19,8 @@ export const scene1Schema = z.object({
 type Scene1Props = z.infer<typeof scene1Schema> & { background: BackgroundProps };
 
 const Scene1: React.FC<Scene1Props> = (props) => {
+  const { defaultProps } = useVideoConfig();
+
   // we make the text conform to available width, fontFamily, fontWeight, and fontSize and add \n to the text
   const titleSplit = useTextSplitter({
     text: props.title.toUpperCase(),
@@ -25,7 +28,7 @@ const Scene1: React.FC<Scene1Props> = (props) => {
     fontWeight: '800',
     letterSpacing: '6px',
     maxLines: 1,
-    maxWidth: 1000,
+    maxWidth: 1200,
   });
   const subtitleSplit = useTextSplitter({
     text: props.subtitle.toUpperCase(),
@@ -33,7 +36,7 @@ const Scene1: React.FC<Scene1Props> = (props) => {
     fontWeight: '800',
     letterSpacing: '6px',
     maxLines: 1,
-    maxWidth: 1000,
+    maxWidth: 1500,
   });
 
   // const subtitleSplit = useTextSplitter({
@@ -50,6 +53,11 @@ const Scene1: React.FC<Scene1Props> = (props) => {
       {/* The background component is always the same setup like this.
       Get's it's input from the root */}
       <Background {...props.background} />
+      <Audio src={staticFile('VO_1.mp3')} volume={defaultProps.audioVolume as number} />
+
+      <AbsoluteFill>
+        <AnimatedBackground />
+      </AbsoluteFill>
       <div
         style={{
           textAlign: 'center',
@@ -76,7 +84,7 @@ const Scene1: React.FC<Scene1Props> = (props) => {
             color: colorVar('primaryText'),
           }}
         >
-          <TitleTextFromRight text={subtitleSplit.text} startAt={5} startAt={30} />
+          <TitleTextFromRight text={subtitleSplit.text} startAt={30} />
         </div>
       </div>
       <AbsoluteFill>
@@ -92,6 +100,7 @@ const Scene1: React.FC<Scene1Props> = (props) => {
         height={HEIGHT * 0.2}
         x={WIDTH * 0.15}
         y={HEIGHT * 0.92}
+        delay={10}
       />
       <RectangularLines
         direction="topToBottom"
@@ -100,6 +109,7 @@ const Scene1: React.FC<Scene1Props> = (props) => {
         height={HEIGHT * 0.42}
         x={WIDTH * 0.85}
         y={HEIGHT * 0.1}
+        delay={10}
       />
     </AbsoluteFill>
   );

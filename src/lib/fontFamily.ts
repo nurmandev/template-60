@@ -1,6 +1,6 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
-import { typedObjectKeys } from './helpers'
+import { typedObjectKeys } from './helpers';
 
 // Got these from https://fonts.google.com/analytics with this script:
 // console.log(
@@ -115,9 +115,9 @@ export const FONT_FAMILIES = {
   Vollkorn: () => import('@remotion/google-fonts/Vollkorn'),
   WorkSans: () => import('@remotion/google-fonts/WorkSans'),
   YanoneKaffeesatz: () => import('@remotion/google-fonts/YanoneKaffeesatz'),
-}
+};
 
-const [first, ...rest] = typedObjectKeys(FONT_FAMILIES)
+const [first, ...rest] = typedObjectKeys(FONT_FAMILIES);
 
-export const FontFamily = z.enum([first!, ...rest]).catch('Roboto')
-export type FontFamily = z.infer<typeof FontFamily>
+export const FontFamily = z.enum([first!, ...rest]).catch('Roboto');
+export type FontFamily = z.infer<typeof FontFamily>;

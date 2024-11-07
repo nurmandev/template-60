@@ -1,4 +1,4 @@
-import { AbsoluteFill, Audio, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
+import { AbsoluteFill, Audio, staticFile, useVideoConfig } from 'remotion';
 import { TransitionSeries, linearTiming } from '@remotion/transitions';
 import { z } from 'zod';
 
@@ -12,10 +12,7 @@ import { LoadFonts } from '../lib/LoadFonts';
 import { getCSSVariables } from '../lib/helpers';
 import { Colors, Fonts } from '../types';
 import { BackgroundProps } from '../backgrounds';
-import { WideSlidePresentation } from '../transitions/WideSlidePresentation';
-import { customCenterPresentation } from '../transitions/CenterPresentation';
-import { HEIGHT, WIDTH } from '../lib/consts';
-import { customL2RPresentation } from '../transitions/Left2RightPresentation';
+import { fade } from '../transitions/FadeTransition';
 
 export const MainSchema = z.object({
   audioVolume: z.number(),
@@ -56,7 +53,6 @@ const Main: React.FC<MainProps> = ({
   scene5Props,
 }) => {
   const { id } = useVideoConfig();
-  const frame = useCurrentFrame();
 
   // You work will be mainly with the Scenes files
 
@@ -76,41 +72,41 @@ const Main: React.FC<MainProps> = ({
         }}
       >
         {/* change the name of your music file in the public folder to match music.mp3  */}
-        <Audio src={staticFile('music.mp3')} volume={audioVolume} />
+        <Audio src={staticFile('Music.mp3')} volume={audioVolume} />
+
         <TransitionSeries>
           <TransitionSeries.Sequence durationInFrames={scene1Duration}>
             <Scene1 {...scene1Props} background={background} />
           </TransitionSeries.Sequence>
-          {/* <TransitionSeries.Transition
-            presentation={WideSlidePresentation({ direction: 'from-right' })}
+          <TransitionSeries.Transition
+            presentation={fade()}
             timing={linearTiming({ durationInFrames: transitionDuration })}
-          /> */}
+          />
           <TransitionSeries.Sequence durationInFrames={scene2Duration}>
             <Scene2 {...scene2Props} background={background} />
           </TransitionSeries.Sequence>
-          {/* <TransitionSeries.Transition
-            presentation={customCenterPresentation({ height: HEIGHT, width: WIDTH })}
+          <TransitionSeries.Transition
+            presentation={fade()}
             timing={linearTiming({ durationInFrames: transitionDuration })}
-          /> */}
+          />
           <TransitionSeries.Sequence durationInFrames={scene3Duration}>
             <Scene3 {...scene3Props} background={background} />
           </TransitionSeries.Sequence>
-          {/* <TransitionSeries.Transition
-            presentation={WideSlidePresentation({ direction: 'from-bottom' })}
+          <TransitionSeries.Transition
+            presentation={fade()}
             timing={linearTiming({ durationInFrames: transitionDuration })}
-          /> */}
+          />
           <TransitionSeries.Sequence durationInFrames={scene4Duration}>
             <Scene4 {...scene4Props} background={background} />
           </TransitionSeries.Sequence>
-          {/* <TransitionSeries.Transition
-            presentation={customL2RPresentation({ height: HEIGHT, width: WIDTH })}
+          <TransitionSeries.Transition
+            presentation={fade()}
             timing={linearTiming({ durationInFrames: transitionDuration })}
-          /> */}
+          />
           <TransitionSeries.Sequence durationInFrames={scene5Duration}>
             <Scene5 {...scene5Props} background={background} />
           </TransitionSeries.Sequence>
         </TransitionSeries>
-        <img src={staticFile(`/light_leaks/Animated%20Light%20Leaks%20Blured_0000${frame}.jpg`)} />
       </AbsoluteFill>
     </LoadFonts>
   );

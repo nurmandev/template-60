@@ -5,9 +5,15 @@ interface DotsAnimationProps {
   x: number;
   y: number;
   direction?: 'horizontal' | 'vertical';
+  color?: string;
 }
 
-const DotsAnimation: React.FC<DotsAnimationProps> = ({ x, y, direction = 'horizontal' }) => {
+const DotsAnimation: React.FC<DotsAnimationProps> = ({
+  x,
+  y,
+  direction = 'horizontal',
+  color = 'white',
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -84,7 +90,7 @@ const DotsAnimation: React.FC<DotsAnimationProps> = ({ x, y, direction = 'horizo
             style={{
               width: dotSize,
               height: dotSize,
-              backgroundColor: 'white',
+              backgroundColor: color,
               opacity,
               transform: `scale(${scale})`,
               // transition: 'opacity 0.5s ease-in-out, transform 0.5s ease-in-out',
