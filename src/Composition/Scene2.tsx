@@ -35,7 +35,6 @@ const Scene2: React.FC<Scene2Props> = (props) => {
     <AbsoluteFill style={{ background: '#93611b' }}>
       {/* <Background {...props.background} /> */}
       <Audio src={staticFile('VO_2.mp3')} volume={defaultProps.audioVolume as number} />
-
       <Gradient
         direction="bottomToTop"
         height={HEIGHT * 0.3}

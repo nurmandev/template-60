@@ -24,15 +24,15 @@ const RectangularLines = ({
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
 
-  // Calculate the clip-path based on the direction prop
-  let clipPathAnimation: string;
-  const clipPathProgress = interpolate(frame, [delay, durationInFrames * 0.15 + delay], [1, 0], {
+  // Progress of clip-path based on frame and delay
+  const clipPathProgress = interpolate(frame, [delay, durationInFrames * 0.5 + delay], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
     easing: Easing.out(Easing.ease),
   });
 
-  // Define the clip path based on the direction
+  // Calculate the clip-path animation based on direction
+  let clipPathAnimation: string;
   switch (direction) {
     case 'leftToRight':
       clipPathAnimation = `polygon(${clipPathProgress * 100}% 0%, 100% 0%, 100% 100%, ${clipPathProgress * 100}% 100%)`;
@@ -41,14 +41,17 @@ const RectangularLines = ({
       clipPathAnimation = `polygon(0% 0%, ${100 - clipPathProgress * 100}% 0%, ${100 - clipPathProgress * 100}% 100%, 0% 100%)`;
       break;
     case 'topToBottom':
-      clipPathAnimation = `polygon(0% 0%, 100% 0%, 100% ${100 - clipPathProgress * 100}%, 0% ${100 - clipPathProgress * 100}%)`;
+      clipPathAnimation = `polygon(0% 0%, 100% 0%, 100% ${clipPathProgress * 100}%, 0% ${clipPathProgress * 100}%)`;
       break;
     case 'bottomToTop':
-      clipPathAnimation = `polygon(0% ${clipPathProgress * 100}%, 100% ${clipPathProgress * 100}%, 100% 100%, 0% 100%)`;
+      clipPathAnimation = `polygon(0% ${100 - clipPathProgress * 100}%, 100% ${100 - clipPathProgress * 100}%, 100% 100%, 0% 100%)`;
       break;
     default:
-      clipPathAnimation = `polygon(${clipPathProgress * 100}% 0%, 100% 0%, 100% 100%, ${clipPathProgress * 100}% 100%)`;
+      clipPathAnimation = `polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)`;
   }
+
+  // Animate background position to move the lines across the fill
+  const backgroundPosition = `${frame}px 0px`;
 
   return (
     <div
@@ -60,20 +63,23 @@ const RectangularLines = ({
         width: width || '100%',
         height: height || '100%',
         opacity,
+        overflow: 'hidden', // Prevents overspill
       }}
     >
       <div
         style={{
-          width: '100%',
-          height: '100%',
+          width: '200%', // Slightly oversized to cover edges
+          height: '200%',
           backgroundImage: `repeating-linear-gradient(
             135deg,
             ${color},
-            ${color} 1px,
-            transparent 10px,
-            transparent 30px
+            ${color} 2px,
+            transparent 12px,
+            transparent 32px
           )`,
+          backgroundPosition, // Animate background position to create moving lines
           clipPath: clipPathAnimation,
+          filter: 'blur(0.5px)', // Softens any visible hard edges
         }}
       />
     </div>
